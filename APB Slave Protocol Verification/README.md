@@ -2,7 +2,7 @@
 
 ## Overview
 
-This project is a UVM-based verification environment developed to verify an **APB Slave** using SystemVerilog and UVM.
+This project is a UVM-based verification environment developed to verify an **APB Slave** using UVM.
 
 The main goal of this project was to understand how a complete UVM testbench is built around a bus protocol and how different UVM components work together to generate, drive, monitor, and check APB transactions.
 
