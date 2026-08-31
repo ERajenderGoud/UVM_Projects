@@ -392,33 +392,6 @@ class apb_scoreboard extends uvm_scoreboard;
 
 endclass
 
-class apb_env extends uvm_env;
-  
-  `uvm_component_utils(apb_env)
-  
-  apb_agent agent;
-  apb_scoreboard scb;
-  apb_coverage cov;
-  
-  function new(string name,uvm_component parent);
-    super.new(name,parent);
-  endfunction
-  
-  virtual function void build_phase(uvm_phase phase);
-    super.build_phase(phase);
-    agent = apb_agent::type_id::create("agent",this);
-    scb = apb_scoreboard::type_id::create("scb",this);
-    cov = apb_coverage::type_id::create("cov",this);
-  endfunction
-  
-  virtual function void connect_phase(uvm_phase phase);
-    super.connect_phase(phase);
-    agent.mon.ap.connect(scb.imp);
-    agent.mon.ap.connect(cov.analysis_export);
-  endfunction
-  
-endclass
-
 class apb_coverage extends uvm_subscriber #(apb_txn);
   
   `uvm_component_utils(apb_coverage)
@@ -478,6 +451,33 @@ class apb_coverage extends uvm_subscriber #(apb_txn);
     `uvm_info(get_type_name(), $sformatf("cross addr_err coverage	: %.2f%%", cg.addr_err.get_coverage()), UVM_LOW)
   endfunction
 
+endclass
+
+class apb_env extends uvm_env;
+  
+  `uvm_component_utils(apb_env)
+  
+  apb_agent agent;
+  apb_scoreboard scb;
+  apb_coverage cov;
+  
+  function new(string name,uvm_component parent);
+    super.new(name,parent);
+  endfunction
+  
+  virtual function void build_phase(uvm_phase phase);
+    super.build_phase(phase);
+    agent = apb_agent::type_id::create("agent",this);
+    scb = apb_scoreboard::type_id::create("scb",this);
+    cov = apb_coverage::type_id::create("cov",this);
+  endfunction
+  
+  virtual function void connect_phase(uvm_phase phase);
+    super.connect_phase(phase);
+    agent.mon.ap.connect(scb.imp);
+    agent.mon.ap.connect(cov.analysis_export);
+  endfunction
+  
 endclass
 
 module apb_assertions #(parameter ADDR_WIDTH = 8,parameter DATA_WIDTH = 8,parameter WAIT_STATES = 2)(
